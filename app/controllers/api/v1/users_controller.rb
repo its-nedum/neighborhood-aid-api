@@ -17,22 +17,30 @@ module Api
             # register a user
             def create
                 user = User.new(user_params)
-                if user.save
-                    token = encode_token({user_id: user.id, firstname: user.firstname, lastname: user.lastname, email: user.email})
+                if User.exists?(email: params[:email])
                     render json: {
-                        status: 'success',
-                        message: 'User created',
-                        data: user,
-                        token: token,
-                    },
-                    status: :created
-                else 
-                    render json: {
-                        status: 'error',
-                        message: 'User not created',
-                        data: user.errors,
+                        status: 'warning',
+                        message: 'User already exists',
                     },
                     status: :unprocessable_entity
+                else
+                    if user.save
+                        token = encode_token({user_id: user.id, firstname: user.firstname, lastname: user.lastname, email: user.email})
+                        render json: {
+                            status: 'success',
+                            message: 'User created',
+                            data: user,
+                            token: token,
+                        },
+                        status: :created
+                    else 
+                        render json: {
+                            status: 'error',
+                            message: 'User not created',
+                            data: user.errors,
+                        },
+                        status: :unprocessable_entity
+                    end
                 end
             end
 
