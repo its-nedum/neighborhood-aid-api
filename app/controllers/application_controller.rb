@@ -5,12 +5,12 @@ class ApplicationController < ActionController::API
     end
 
     def authorize_request
-        header = request.headers['Authorization']
-        if header
-            header = header.split(' ').last 
+        token = request.headers['Authorization']
+        if token
+            token = token.split(' ').last 
             begin
-                @decoded = decode_token(header)
-                @current_user = User.find(@decoded[:user_id])
+                @decoded = decode_token(token)
+                @current_user = User.find_by_email(@decoded[:email])
             rescue ActiveRecord::RecordNotFound => e
                 render json: { errors: e.message }, status: :unauthorized
             rescue JWT::DecodeError => e
