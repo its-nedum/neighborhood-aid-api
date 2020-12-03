@@ -3,6 +3,7 @@ module Api
         class RequestsController < ApplicationController
             before_action :authorize_request
 
+            # Get all the request => GET: /api/v1/requests
             def index
                 requests = Request.all
                 render json: {
@@ -13,25 +14,45 @@ module Api
                 status: :ok
             end
          
+            # Make a new the request => POST: /api/v1/requests
             def create
-                @request = Request.new({title: params[:title], reqtype: params[:reqtype], description: params[:description],
+                request = Request.new({title: params[:title], reqtype: params[:reqtype], description: params[:description],
                     lat: params[:lat], lng: params[:lng], address: params[:address], status: params[:status], user_id: @current_user.id})
-                if @request.save
+                if request.save
                     render json: {
                         status: 'success',
                         message: 'Request added successfully',
-                        data: @request
+                        data: request
                     },
                     status: :created
                 else 
                     render json: {
                         status: 'error',
                         message: 'Request not saved',
-                        data: @request.errors
+                        data: request.errors
                     },
                     status: :unprocessable_entity
                 end
+            end
 
+            # Get a single request [including the volunteers]
+            def show
+                request = Request.find(params[:id])
+                if request
+                    render json: {
+                        status: 'success',
+                        message: 'Requests returned',
+                        data: request,
+                    },
+                    status: :ok
+                else 
+                    render json: {
+                        status: 'error',
+                        message: 'Request not saved',
+                        data: request.errors
+                    },
+                    status: :unprocessable_entity
+                end
             end
 
 
