@@ -3,7 +3,7 @@ module Api
         class RequestsController < ApplicationController
             before_action :authorize_request
 
-            # Get all the request 
+            # Get all the request [Any request with status of 1 (fulfilled) should not be displayed]
             # GET: /api/v1/requests
             def index
                 requests = Request.all
@@ -46,6 +46,27 @@ module Api
                         :user => {
                             :only => [:id, :firstname, :lastname, :email]
                         }
+                    },
+                    status: :ok
+                else 
+                    render json: {
+                        status: 'error',
+                        message: 'Request not found',
+                    },
+                    status: :unprocessable_entity
+                end
+            end
+
+
+            # Get request of a particular  user
+            # GET: /api/v1/my-requests
+            def my_request
+                request = Request.where(user_id: @current_user.id)
+                if request
+                    render json: {
+                        status: 'success',
+                        message: '',
+                        data: request,
                     },
                     status: :ok
                 else 

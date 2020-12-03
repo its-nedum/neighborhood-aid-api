@@ -6,6 +6,8 @@ Rails.application.routes.draw do
       resources :users, only: [:index, :create]
       post '/login', to: "users#login"
       resources :requests
+      get '/my-requests', to: "requests#my_request"
+      # resources :volunteers
     end
   end
 
