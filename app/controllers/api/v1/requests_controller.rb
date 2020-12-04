@@ -6,7 +6,7 @@ module Api
             # Get all the request [Any request with status of 1 (fulfilled) should not be displayed]
             # GET: /api/v1/requests
             def index
-                requests = Request.all
+                requests = Request.where(status: 0)
                 render json: {
                     status: 'success',
                     message: 'All requests',
@@ -45,6 +45,9 @@ module Api
                     render json: request, :include => {
                         :user => {
                             :only => [:id, :firstname, :lastname, :email]
+                        },
+                        :volunteers => {
+                            :only => [:id, :volunteer_id]
                         }
                     },
                     status: :ok
@@ -72,7 +75,7 @@ module Api
                 else 
                     render json: {
                         status: 'error',
-                        message: 'Request not found',
+                        message: 'Requests not found',
                     },
                     status: :unprocessable_entity
                 end

@@ -1,6 +1,6 @@
 class Request < ApplicationRecord
     belongs_to :user
-    # has_many :volunteers, dependent: :destroy
+    has_many :volunteers, dependent: :destroy
 
     validates :title, presence: true
     validates :reqtype, presence: true
