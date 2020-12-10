@@ -86,6 +86,46 @@ module Api
                 end
             end
 
+            # Mark request as fulfilled
+            # PATCH: /api/v1/requests/:id
+            def update
+                request = Request.find_by_id(params[:id])
+                if request
+                    request.status = 1
+                    if request.save
+                        render json: {
+                            status: 'success',
+                            message: 'Request marked as fulfilled',
+                        },
+                        status: :ok
+                    else
+                        render json: {
+                            status: 'error',
+                            message: 'Request failed',
+                            data: request.errors,
+                        },
+                        status: :unprocessable_entity
+                    end
+                else
+                    render status: :unauthorized
+                end
+            end
+
+            # Delete a request
+            # DELETE: /api/v1/requests/:id
+            def destroy
+                request = Request.find_by_id(params[:id])
+                if request
+                    request.destroy
+                    render json: {
+                        status: 'success',
+                        message: 'Request deleted',
+                    },
+                    status: :ok
+                else
+                    render status: :unauthorized
+                end
+            end
 
             private
             def request_params
