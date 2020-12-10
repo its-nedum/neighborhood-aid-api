@@ -47,7 +47,12 @@ module Api
                             :only => [:id, :firstname, :lastname, :email]
                         },
                         :volunteers => {
-                            :only => [:id, :volunteer_id]
+                            :only => [:id, :user_id, :created_at],
+                            :include => {
+                                :user => {
+                                    :only => [:id, :firstname, :lastname, :email]
+                                }
+                            }
                         }
                     },
                     status: :ok

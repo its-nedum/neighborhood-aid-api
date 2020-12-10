@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_04_112959) do
+ActiveRecord::Schema.define(version: 2020_12_09_085537) do
 
   create_table "requests", force: :cascade do |t|
     t.string "title"
@@ -38,11 +38,13 @@ ActiveRecord::Schema.define(version: 2020_12_04_112959) do
 
   create_table "volunteers", force: :cascade do |t|
     t.integer "requester_id"
-    t.integer "volunteer_id"
     t.integer "request_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_id"
     t.index ["request_id"], name: "index_volunteers_on_request_id"
+    t.index ["user_id"], name: "index_volunteers_on_user_id"
   end
 
+  add_foreign_key "volunteers", "users"
 end

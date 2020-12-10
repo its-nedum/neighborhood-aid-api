@@ -21,7 +21,7 @@ module Api
                     status: :ok
                 else
                     # if no duplicate then create the volunteer
-                    volunteer = Volunteer.new({request_id: params[:request_id], requester_id: params[:requester_id], volunteer_id: @current_user.id})
+                    volunteer = Volunteer.new({request_id: params[:request_id], requester_id: params[:requester_id], user_id: @current_user.id})
                     if volunteer.save
                         render json: {
                             status: 'success',
@@ -43,7 +43,7 @@ module Api
             # get all a users volunteerings
             # GET: /api/v1/my-volunteerings
             def my_volunteerings
-                volunteering = Volunteer.where(volunteer_id: @current_user.id)
+                volunteering = Volunteer.where(user_id: @current_user.id)
                 if volunteering
                     render json: volunteering, :include => {
                         :request => {
