@@ -45,23 +45,50 @@ module Api
             end
 
             # Get a chat messages between the requester and volunteer including the request
-            # GET: /api/v1/chat/:request_id
+            # GET: /api/v1/chat/:request_id/:user_id(sender_id)
             def get_chat_messages
-                chats = Message.includes(:user).where(receiver_id: @current_user.id, request_id: params[:request_id]).or(Message.includes(:user).where(user_id: @current_user.id, request_id: params[:request_id])).order(created_at: :asc)
-                if chats.any?
-                    render json: chats, :include => {
-                        :user => {
-                            :only => [:id, :firstname, :lastname]
+                # update read status for the message
+                the_mesg = Message.where(receiver_id: @current_user.id, user_id: params[:user_id], request_id: params[:request_id], read_status: 0)
+                the_mesg.read_status = 1
+                if the_mesg.save
+                    # get chat messages
+                    chats = Message.includes(:user).where(receiver_id: @current_user.id, user_id: params[:user_id], request_id: params[:request_id]).or(Message.includes(:user).where(user_id: @current_user.id, receiver_id: params[:user_id], request_id: params[:request_id])).order(created_at: :asc)
+                    if chats.any?
+                        render json: chats, :include => {
+                            :user => {
+                                :only => [:id, :firstname, :lastname]
+                            },
+                            :request => {
+                                :only => [:id, :title, :reqtype, :status, :description, :created_at]
+                            }
                         },
-                        :request => {
-                            :only => [:id, :title, :reqtype, :status, :description, :created_at]
-                        }
-                    },
-                    status: :ok
+                        status: :ok
+                    else
+                        render json: {
+                            status: 'no-content',
+                            message: 'No chat on this request yet'
+                        },
+                        status: :ok
+                    end
                 else
                     render json: {
-                        status: 'no-content',
-                        message: 'No chat on this request yet'
+                        status: 'error',
+                        message: 'Unable to update read receipts'
+                    },
+                    status: :unprocessable_entity
+                end
+            end
+
+
+            # Get message notification
+            # GET: /api/v1/notifications
+            def message_notifications
+                notifications = Message.where(receiver_id: @current_user.id, read_status: 0)
+               if notifications
+                    render json: {
+                        status: 'success',
+                        message: 'Your notifications',
+                        data: notifications.length()
                     },
                     status: :ok
                 end

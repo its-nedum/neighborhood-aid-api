@@ -8,13 +8,15 @@ Rails.application.routes.draw do
 
       resources :requests
       get '/my-requests', to: "requests#my_request"
+      patch '/republish/:request_id', to: "requests#republish"
 
       resources :volunteers, only: [:index, :create]
       get '/my-volunteerings', to: "volunteers#my_volunteerings"
 
       resources :messages
       get '/my-messages', to: 'messages#my_messages'
-      get '/chat/:request_id', to: 'messages#get_chat_messages'
+      get '/chat/:request_id/:user_id', to: 'messages#get_chat_messages'
+      get '/notifications', to: 'messages#message_notifications'
     end
   end
 

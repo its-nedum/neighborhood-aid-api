@@ -126,6 +126,40 @@ module Api
                     render status: :unauthorized
                 end
             end
+            
+            
+            # Republish a request => find the request destroy all the volunteers and change status to 0
+            # PATCH: /api/v1/republish/:request_id
+            def republish
+                request = Request.find_by_id(params[:request_id])
+                if request
+                    volunteers = Volunteer.where(request_id: params[:request_id])
+                    if volunteers
+                        # delete all volunteers
+                        volunteers.destroy_all
+                        # change request status
+                        request.status = 0
+                        if request.save
+                            render json: {
+                                status: 'success',
+                                message: 'Request republished',
+                                data: request,
+                            },
+                            status: :ok
+                        else
+                            render json: {
+                                status: 'success',
+                                message: 'Unable to republish this request'
+                            },
+                            status: :unprocessable_entity
+                        end
+                    else
+                        render status: :unauthorized
+                    end
+                else
+                    render status: :unauthorized
+                end
+            end
 
             private
             def request_params
