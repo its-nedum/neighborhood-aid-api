@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       resources :requests
       get '/my-requests', to: "requests#my_request"
       patch '/republish/:request_id', to: "requests#republish"
+      get '/request-counter', to: "requests#request_counter"
 
       resources :volunteers, only: [:index, :create]
       get '/my-volunteerings', to: "volunteers#my_volunteerings"

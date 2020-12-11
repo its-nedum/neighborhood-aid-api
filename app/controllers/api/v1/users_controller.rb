@@ -1,15 +1,15 @@
 module Api
     module V1
         class UsersController < ApplicationController
-            before_action :authorize_request, except: [:create, :login]
+            before_action :authorize_request, except: [:create, :login, :index]
 
-            # get all users
+            # get all users / counter for homepage
             def index
                 user = User.order('id DESC')
                 render json: {
                     status: 'success',
-                    message: 'All users',
-                    data: user,
+                    message: 'Users counter result',
+                    data: user.length()
                 },
                 status: :ok
             end

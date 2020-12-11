@@ -1,7 +1,7 @@
 module Api
     module V1
         class RequestsController < ApplicationController
-            before_action :authorize_request
+            before_action :authorize_request, except: [:request_counter]
 
             # Get all the request [Any request with status of 1 (fulfilled) should not be displayed]
             # GET: /api/v1/requests
@@ -158,6 +158,24 @@ module Api
                     end
                 else
                     render status: :unauthorized
+                end
+            end
+
+            # count fulfilled and unfulfilled requests
+            def request_counter
+                unfulfilled = Request.where(status: 0)
+                fulfilled = Request.where(status: 1)
+                if unfulfilled && fulfilled
+                    render json: {
+                        status: 'success',
+                        message: 'Your requests counter result',
+                        data: {
+                            unfulfilled: unfulfilled.length(),
+                            fulfilled: fulfilled.length()
+                        }
+                    }
+                else
+                    render status: :unprocessable_entity
                 end
             end
 
