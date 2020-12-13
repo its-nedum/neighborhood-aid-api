@@ -7,12 +7,16 @@ module Api
             # GET: /api/v1/requests
             def index
                 requests = Request.where(status: 0)
-                render json: {
-                    status: 'success',
-                    message: 'All requests',
-                    data: requests,
-                },
-                status: :ok
+                if requests
+                    render json: requests, :include => {
+                        :user => {
+                            :only => [:id, :firstname, :lastname]
+                        }
+                    },
+                    status: :ok
+                else
+                    render status: :no_content
+                end
             end
          
             # Make a new the request 
