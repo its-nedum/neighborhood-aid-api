@@ -31,7 +31,7 @@ module Api
                     end
 
                     # prevent duplicate volunteering
-                    duplicate = Volunteer.where(volunteer_id: @current_user.id, request_id: params[:request_id])
+                    duplicate = Volunteer.where(user_id: @current_user.id, request_id: params[:request_id])
                     if duplicate.any? 
                             render json: {
                                 status: 'warning',
