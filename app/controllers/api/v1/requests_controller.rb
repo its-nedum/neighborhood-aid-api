@@ -77,7 +77,7 @@ module Api
                 if request
                     render json: {
                         status: 'success',
-                        message: '',
+                        message: 'Requests found',
                         data: request,
                     },
                     status: :ok

@@ -73,7 +73,12 @@ module Api
                 if volunteering
                     render json: volunteering, :include => {
                         :request => {
-                            :only => [:id, :title, :reqtype, :description, :lat, :lng, :address, :status]
+                            :only => [:id, :title, :reqtype, :description, :lat, :lng, :address, :status],
+                            :include => {
+                                :user => {
+                                    :only => [:id, :firstname, :lastname]
+                                }
+                            }
                         }
                     },
                     status: :ok
