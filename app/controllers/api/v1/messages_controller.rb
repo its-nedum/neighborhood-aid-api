@@ -39,8 +39,9 @@ module Api
                     render json: {
                         status: 'no-content',
                         message: 'You don\'t have any message yet',
+                        data: []
                     },
-                    status: :ok
+                    status: :unprocessable_entity
                 end
             end
 
@@ -68,7 +69,7 @@ module Api
                             status: 'no-content',
                             message: 'No chat on this request yet'
                         },
-                        status: :ok
+                        status: :unprocessable_entity
                     end
                 else
                     render json: {

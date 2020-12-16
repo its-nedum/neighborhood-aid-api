@@ -15,7 +15,7 @@ module Api
                     },
                     status: :ok
                 else
-                    render status: :no_content
+                    render status: :unprocessable_entity
                 end
             end
          
