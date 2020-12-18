@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       get '/my-messages', to: 'messages#my_messages'
       get '/chat/:request_id/:user_id', to: 'messages#get_chat_messages'
       get '/notifications', to: 'messages#message_notifications'
+      patch '/read-status/:request_id/:user_id', to: 'messages#update_read_status'
     end
   end
 

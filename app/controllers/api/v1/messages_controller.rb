@@ -45,36 +45,53 @@ module Api
                 end
             end
 
-            # Get a chat messages between the requester and volunteer including the request
-            # GET: /api/v1/chat/:request_id/:user_id(sender_id)
-            def get_chat_messages
+            # Update the chat read status
+            # PATCH: /api/v1/read-status/:request_id/:user_id(sender_id)
+            def update_read_status
                 # update read status for the message
-                the_mesg = Message.where(receiver_id: @current_user.id, user_id: params[:user_id], request_id: params[:request_id], read_status: 0)
-                the_mesg.read_status = 1
-                if the_mesg.save
-                    # get chat messages
-                    chats = Message.includes(:user).where(receiver_id: @current_user.id, user_id: params[:user_id], request_id: params[:request_id]).or(Message.includes(:user).where(user_id: @current_user.id, receiver_id: params[:user_id], request_id: params[:request_id])).order(created_at: :asc)
-                    if chats.any?
-                        render json: chats, :include => {
-                            :user => {
-                                :only => [:id, :firstname, :lastname]
-                            },
-                            :request => {
-                                :only => [:id, :title, :reqtype, :status, :description, :created_at]
-                            }
-                        },
-                        status: :ok
+                the_mesg = Message.find_by(receiver_id: @current_user.id, user_id: params[:user_id], request_id: params[:request_id], read_status: 0)
+                if the_mesg
+                    the_mesg.read_status = 1
+                    if the_mesg.save
+                        render json: {
+                            status: 'success',
+                            message: 'Read status updated',
+                            data: the_mesg
+                        }    
                     else
                         render json: {
-                            status: 'no-content',
-                            message: 'No chat on this request yet'
+                            status: 'error',
+                            message: 'Unable to update read receipts'
                         },
                         status: :unprocessable_entity
                     end
+                end
+            end
+
+            # Get a chat messages between the requester and volunteer including the request
+            # GET: /api/v1/chat/:request_id/:user_id(sender_id)
+            def get_chat_messages
+                # get chat messages
+                chats = Message.includes(:user).where(receiver_id: @current_user.id, user_id: params[:user_id], request_id: params[:request_id]).or(Message.includes(:user).where(user_id: @current_user.id, receiver_id: params[:user_id], request_id: params[:request_id])).order(created_at: :asc)
+                if chats.any?
+                    render json: chats, :include => {
+                        :user => {
+                            :only => [:id, :firstname, :lastname]
+                        },
+                        # :request => {
+                        #     :only => [:id, :title, :reqtype, :status, :description, :created_at],
+                        #     :include => {
+                        #         :user => {
+                        #             :only => [:id, :firstname, :lastname]
+                        #         }
+                        #     }
+                        # }
+                    },
+                    status: :ok
                 else
                     render json: {
-                        status: 'error',
-                        message: 'Unable to update read receipts'
+                        status: 'no-content',
+                        message: 'No chat on this request yet'
                     },
                     status: :unprocessable_entity
                 end
