@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_11_104740) do
+ActiveRecord::Schema.define(version: 2020_12_22_131421) do
 
   create_table "messages", force: :cascade do |t|
     t.integer "receiver_id"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2020_12_11_104740) do
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "republish_status", default: false
     t.index ["user_id"], name: "index_requests_on_user_id"
   end
 

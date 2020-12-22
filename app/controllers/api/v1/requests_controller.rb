@@ -120,6 +120,7 @@ module Api
             def destroy
                 request = Request.find_by_id(params[:id])
                 if request
+                    # delete the request and all associated messages and volunteering
                     request.destroy
                     render json: {
                         status: 'success',
@@ -137,13 +138,12 @@ module Api
             def republish
                 request = Request.find_by_id(params[:request_id])
                 if request
-                    volunteers = Volunteer.where(request_id: params[:request_id])
-                    if volunteers
-                        # delete all volunteers
-                        volunteers.destroy_all
-                        # change request status
-                        request.status = 0
-                        if request.save
+                    request.republish_status = !request.republish_status
+                    if request.save
+                        volunteers = Volunteer.where(request_id: params[:request_id])
+                        if volunteers
+                            # delete all volunteers
+                            volunteers.destroy_all
                             render json: {
                                 status: 'success',
                                 message: 'Request republished',
@@ -152,13 +152,11 @@ module Api
                             status: :ok
                         else
                             render json: {
-                                status: 'success',
+                                status: 'error',
                                 message: 'Unable to republish this request'
                             },
                             status: :unprocessable_entity
                         end
-                    else
-                        render status: :unauthorized
                     end
                 else
                     render status: :unauthorized
