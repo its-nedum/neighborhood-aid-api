@@ -41,7 +41,7 @@ module Api
                         message: 'You don\'t have any message yet',
                         data: []
                     },
-                    status: :unprocessable_entity
+                    status: :no_content
                 end
             end
 
@@ -93,7 +93,7 @@ module Api
                         status: 'no-content',
                         message: 'No chat on this request yet'
                     },
-                    status: :unprocessable_entity
+                    status: :no_content
                 end
             end
 

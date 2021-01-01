@@ -83,10 +83,10 @@ module Api
                     status: :ok
                 else 
                     render json: {
-                        status: 'error',
+                        status: 'no-content',
                         message: 'Requests not found',
                     },
-                    status: :unprocessable_entity
+                    status: :no_content
                 end
             end
 
