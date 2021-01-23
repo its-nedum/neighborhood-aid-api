@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 describe 'Users Controller', type: :request do
+    before(:each) do
+        FactoryBot.create(:user)
+    end
     
     it 'should return count of all users' do
-        FactoryBot.create(:user)
         get '/api/v1/users'
 
         expect(response).to have_http_status(:ok)
@@ -26,9 +28,9 @@ describe 'Users Controller', type: :request do
     #     expect(response).to have_http_status(:created)
     # end
 
-    it 'should log a user in' do
-        FactoryBot.create(:user)
+    # https://www.oneworldcoders.com/apprentice-journals/working-with-cloudinary-in-rails-app
 
+    it 'should log a user in' do
         post '/api/v1/login', params: {email: 'janedoe@gmail.com', password: '1234567'}
 
         expect(response).to have_http_status(:ok)
