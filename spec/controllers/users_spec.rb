@@ -32,9 +32,11 @@ describe 'Users Controller', type: :request do
 
     it 'should log a user in' do
         post '/api/v1/login', params: {email: 'janedoe@gmail.com', password: '1234567'}
-
         expect(response).to have_http_status(:ok)
+    end
+
+    it 'should include user token in response data' do
+        post '/api/v1/login', params: {email: 'janedoe@gmail.com', password: '1234567'}
         expect(response.body).to include('token')
-        # raise response.body
     end
 end
