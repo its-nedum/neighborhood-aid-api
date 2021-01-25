@@ -31,12 +31,12 @@ describe 'Users Controller', type: :request do
     # https://www.oneworldcoders.com/apprentice-journals/working-with-cloudinary-in-rails-app
 
     it 'should log a user in' do
-        post '/api/v1/login', params: {email: 'janedoe@gmail.com', password: '1234567'}
+        post '/api/v1/login', params: {email: 'Jane@gmail.com', password: '1234567'}
         expect(response).to have_http_status(:ok)
     end
 
     it 'should include user token in response data' do
-        post '/api/v1/login', params: {email: 'janedoe@gmail.com', password: '1234567'}
+        post '/api/v1/login', params: {email: 'Jane@gmail.com', password: '1234567'}
         expect(response.body).to include('token')
     end
 end

@@ -5,7 +5,7 @@ describe 'Requests Controller', type: :request do
     before(:each) do
         FactoryBot.create(:user)
         FactoryBot.create(:request)
-        post '/api/v1/login', params: {email: 'janedoe@gmail.com', password: '1234567'}
+        post '/api/v1/login', params: {email: 'Jane@gmail.com', password: '1234567'}
         @token = JSON.parse(response.body)['token']
     end
 
@@ -38,12 +38,10 @@ describe 'Requests Controller', type: :request do
         requests.each do |req| 
              expect(req['status']).to eq(0)
         end
-        expect(JSON.parse(response.body)).to be_an_instance_of(Array)
     end
 
     it 'should return all requests as an array' do
         get '/api/v1/requests', as: :json, headers: {:Authorization => @token}
-        
         expect(JSON.parse(response.body)).to be_an_instance_of(Array)
     end
 
