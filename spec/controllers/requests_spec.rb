@@ -5,6 +5,7 @@ describe 'Requests Controller', type: :request do
     before(:each) do
         FactoryBot.create(:user)
         FactoryBot.create(:request)
+        
         post '/api/v1/login', params: {email: 'Jane@gmail.com', password: '1234567'}
         @token = JSON.parse(response.body)['token']
     end

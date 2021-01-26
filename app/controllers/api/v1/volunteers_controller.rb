@@ -51,7 +51,7 @@ module Api
                                 message:  'Your volunteering was successful',
                                 data: volunteer,
                             },
-                            status: :ok
+                            status: :created
                         else
                             render json: {
                                 status: 'error',
@@ -79,7 +79,7 @@ module Api
                             message:  'Your volunteering was successful',
                             data: volunteer,
                         },
-                        status: :ok
+                        status: :created
                     else
                         render json: {
                             status: 'error',
