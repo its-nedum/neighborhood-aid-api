@@ -175,7 +175,8 @@ module Api
                             unfulfilled: unfulfilled.length(),
                             fulfilled: fulfilled.length()
                         }
-                    }
+                    },
+                    status: :ok
                 else
                     render status: :unprocessable_entity
                 end

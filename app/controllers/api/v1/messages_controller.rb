@@ -78,14 +78,6 @@ module Api
                         :user => {
                             :only => [:id, :firstname, :lastname]
                         },
-                        # :request => {
-                        #     :only => [:id, :title, :reqtype, :status, :description, :created_at],
-                        #     :include => {
-                        #         :user => {
-                        #             :only => [:id, :firstname, :lastname]
-                        #         }
-                        #     }
-                        # }
                     },
                     status: :ok
                 else

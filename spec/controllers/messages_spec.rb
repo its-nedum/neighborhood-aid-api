@@ -36,4 +36,10 @@ describe 'Messages Controller', type: :request do
         expect(response).to have_http_status(:ok)
     end
 
+    it 'should return user message notification' do
+        get '/api/v1/notifications', as: :json, headers: {:Authorization => @token}
+        expect(JSON.parse(response.body)['data']).to be_truthy
+        expect(response).to have_http_status(:ok)
+    end
+
 end
